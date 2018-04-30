@@ -4,7 +4,7 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 
 import java.util.List;
 
-@JsonInclude(JsonInclude.Include.NON_NULL)
+@JsonInclude(JsonInclude.Include.NON_EMPTY)
 public class Vehicle {
     public String cor;
     public String descricao;
@@ -27,11 +27,24 @@ public class Vehicle {
     public List<Generic> seguranca;
     public List<Generic> exterior;
     public List<Generic> som;
+    public List<Generic> conforto;
     public Generic marca;
     public Generic versao;
     public Integer cilindrada;
     public String tipo;
     public String nome;
+
+    public boolean isBlindado() {
+        return blindado;
+    }
+
+    public List<Generic> getConforto() {
+        return conforto;
+    }
+
+    public void setConforto(List<Generic> conforto) {
+        this.conforto = conforto;
+    }
 
     public Generic getMarca() {
         return marca;
@@ -245,7 +258,7 @@ public class Vehicle {
 
     }
 
-    public Vehicle(String cor, String descricao, String controleDeTracao, boolean blindado, Integer capacidadeDeCarga, String tracao, String marcaDoMotor, String dimensaoDoPneu, Integer anoFabricacao, Integer anoModelo, Integer numeroDePortas, Integer kmRodados, Integer potencia, String carroceria, String tipoCombustivel, String cambio, String sistemaDeFreio, Integer cilindrada, String tipo, String nome) {
+    public Vehicle(String cor, String descricao, String controleDeTracao, boolean blindado, Integer capacidadeDeCarga, String tracao, String marcaDoMotor, String dimensaoDoPneu, Integer anoFabricacao, Integer anoModelo, Integer numeroDePortas, Integer kmRodados, Integer potencia, String carroceria, String tipoCombustivel, String cambio, String sistemaDeFreio, List<Generic> opcionais, List<Generic> seguranca, List<Generic> exterior, List<Generic> som, List<Generic> conforto, Generic marca, Generic versao, Integer cilindrada, String tipo, String nome) {
         this.cor = cor;
         this.descricao = descricao;
         this.controleDeTracao = controleDeTracao;
@@ -263,6 +276,13 @@ public class Vehicle {
         this.tipoCombustivel = tipoCombustivel;
         this.cambio = cambio;
         this.sistemaDeFreio = sistemaDeFreio;
+        this.opcionais = opcionais;
+        this.seguranca = seguranca;
+        this.exterior = exterior;
+        this.som = som;
+        this.conforto = conforto;
+        this.marca = marca;
+        this.versao = versao;
         this.cilindrada = cilindrada;
         this.tipo = tipo;
         this.nome = nome;

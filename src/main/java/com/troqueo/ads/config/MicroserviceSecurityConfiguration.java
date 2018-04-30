@@ -42,7 +42,8 @@ public class MicroserviceSecurityConfiguration extends WebSecurityConfigurerAdap
             .antMatchers("/swagger-ui/index.html")
             .antMatchers("/test/**")
             .antMatchers("/h2-console/**")
-            .antMatchers(HttpMethod.GET, "/api/anuncios");
+            .antMatchers(HttpMethod.GET, "/api/anuncios/**")
+            .antMatchers(HttpMethod.POST, "/api/anuncios/**");
     }
 
     @Override

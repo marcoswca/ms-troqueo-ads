@@ -1,4 +1,5 @@
 package com.troqueo.ads.domain.ad;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.troqueo.ads.domain.user.User;
 import org.bson.types.ObjectId;
 import org.springframework.data.annotation.Id;
@@ -42,6 +43,17 @@ public class Ad implements Serializable {
 
     public Ad(){
 
+    }
+
+    public Ad(ObjectId _id, Vehicle veiculo, List<String> imagens, Date createdAt, Date updatedAt, VehicleDocument documentacao, VehicleDeal negociacao, ObjectId usuario) {
+        this._id = _id;
+        this.veiculo = veiculo;
+        this.imagens = imagens;
+        this.createdAt = createdAt;
+        this.updatedAt = updatedAt;
+        this.documentacao = documentacao;
+        this.negociacao = negociacao;
+        this.usuario = usuario;
     }
 
     public String get_id() {
@@ -101,11 +113,8 @@ public class Ad implements Serializable {
     }
 
     public String getUsuario() {
-        return usuario.toHexString();
-    }
-
-    public void setUsuario(ObjectId usuario) {
-        this.usuario = usuario;
+        if(usuario != null) return usuario.toHexString();
+        return null;
     }
 
     public User getUser() {
@@ -115,4 +124,9 @@ public class Ad implements Serializable {
     public void setUser(User user) {
         this.user = user;
     }
+
+    public void setUsuario(ObjectId usuario) {
+        this.usuario = usuario;
+    }
+
 }
