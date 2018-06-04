@@ -1,62 +1,82 @@
 package com.troqueo.ads.web.rest;
 
+import com.codahale.metrics.annotation.Timed;
 import com.troqueo.ads.domain.ad.Ad;
-import com.troqueo.ads.domain.user.User;
-import com.troqueo.ads.repository.AdRepository;
-import com.troqueo.ads.security.SecurityUtils;
-import com.troqueo.ads.security.jwt.TokenProvider;
-import com.troqueo.ads.service.dto.UserDTO;
-import com.troqueo.ads.web.rest.errors.NotFoundRequestException;
+import com.troqueo.ads.service.AdService;
+import com.troqueo.ads.service.dto.AdDTO;
+import com.troqueo.ads.web.rest.util.HeaderUtil;
 import io.github.jhipster.web.util.ResponseUtil;
-import org.springframework.web.bind.annotation.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.web.client.RestTemplate;
+import org.springframework.data.mongodb.core.MongoOperations;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/api")
 public class AdsResource {
 
-    private final AdRepository adRepository;
-    private static final Logger LOGGER = LoggerFactory.getLogger(AdsResource.class);
-    private TokenProvider tokenProvider;
-    private RestTemplate restTemplate;
+    private static final Logger log = LoggerFactory.getLogger(AdsResource.class);
 
-    public AdsResource(AdRepository adRepository) {
-        this.adRepository = adRepository;
+    private final AdService adService;
+
+    MongoOperations mongoOperations;
+
+    public AdsResource(AdService adService) {
+        this.adService = adService;
     }
 
     @GetMapping("/anuncios")
-    public List<Ad> listAds(@RequestParam Map<String, String> requestParams){
-        return adRepository.aggregate(requestParams);
+    @Timed
+    public ResponseEntity<List<AdDTO>> listAds(@RequestParam Map<String, String> requestParams) {
+        return new ResponseEntity<>(adService.list(requestParams), HttpStatus.OK);
+    }
+
+    @GetMapping("/destaques")
+    @Timed
+    public ResponseEntity<List<AdDTO>> top(@RequestParam Map<String, String> requestParams) {
+        return new ResponseEntity<>(adService.list(requestParams), HttpStatus.OK);
     }
 
     @GetMapping("/anuncios/{id}")
-    public Ad getAd(@PathVariable String id){
-        restTemplate = new RestTemplate();
-        Ad ad = adRepository.findOne(id);
-        User user = restTemplate.getForObject("http://localhost:8080/api/users/" + ad.getUsuario(), User.class);
-        ad.setUser(user);
-        return ad;
+    @Timed
+    public ResponseEntity<AdDTO> getAd(@PathVariable String id) {
+        return ResponseUtil.wrapOrNotFound(
+            adService.findById(id)
+                .map(AdDTO::new));
     }
 
     @PostMapping("/anuncios")
-    public Ad createAd(@RequestBody Ad ad) {
-        Ad adInstance = adRepository.save(ad);
-        return ad;
+    @Timed
+    public ResponseEntity<Ad> createUser(@Valid @RequestBody AdDTO adDTO) throws URISyntaxException {
+
+        Ad newAd = adService.createAd(adDTO);
+        return ResponseEntity.created(new URI("/api/anuncios/" + newAd.get_id()))
+            .headers(HeaderUtil.createAlert("A user is created with identifier " + newAd.get_id(), newAd.get_id()))
+            .body(newAd);
     }
 
     @DeleteMapping("/anuncios/{id}")
-    public String deleteAd(@PathVariable String id){
-        if (adRepository.findOne(id) != null) {
-            adRepository.delete(id);
-            return id;
-        } else {
-            throw new NotFoundRequestException();
-        }
+    @Timed
+    public String deleteAd(@PathVariable String id) {
+        return adService.delete(id);
+    }
+
+    @PutMapping("/anuncios/{id}")
+    @Timed
+    public ResponseEntity<AdDTO> updateAd(@PathVariable String id, @RequestBody AdDTO adDTO) {
+        Optional<AdDTO> updatedAd = adService.update(adDTO);
+
+        return ResponseUtil.wrapOrNotFound(updatedAd,
+            HeaderUtil.createAlert("A ad is updated with identifier " + adDTO.get_id(), adDTO.get_id()));
     }
 
 }

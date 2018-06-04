@@ -83,7 +83,7 @@ public class TokenProvider {
         return new UsernamePasswordAuthenticationToken(principal, token, authorities);
     }
 
-    public String getUserLoggedId(){
+    public String getUserLoggedId() {
         String token = jHipsterProperties.getSecurity().getAuthentication().getJwt().toString();
         Claims claims = Jwts.parser()
             .setSigningKey(secretKey)

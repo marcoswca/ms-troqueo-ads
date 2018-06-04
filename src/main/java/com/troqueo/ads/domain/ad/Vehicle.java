@@ -254,7 +254,7 @@ public class Vehicle {
         this.nome = nome;
     }
 
-    public Vehicle(){
+    public Vehicle() {
 
     }
 

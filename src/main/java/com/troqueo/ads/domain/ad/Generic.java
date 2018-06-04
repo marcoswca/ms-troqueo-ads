@@ -11,7 +11,8 @@ public class Generic {
         this.nome = nome;
     }
 
-    public Generic(){}
+    public Generic() {
+    }
 
     public Generic(String nome) {
         this.nome = nome;

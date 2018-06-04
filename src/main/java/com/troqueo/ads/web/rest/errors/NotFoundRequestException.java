@@ -5,7 +5,7 @@ import org.zalando.problem.Status;
 
 public class NotFoundRequestException extends AbstractThrowableProblem {
 
-    public NotFoundRequestException(){
+    public NotFoundRequestException() {
         super(ErrorConstants.DEFAULT_TYPE, "Not found", Status.NOT_FOUND);
     }
 }

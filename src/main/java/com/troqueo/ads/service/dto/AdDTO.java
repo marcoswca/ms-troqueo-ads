@@ -1,45 +1,80 @@
-package com.troqueo.ads.domain.ad;
+package com.troqueo.ads.service.dto;
 
+import com.troqueo.ads.domain.ad.Ad;
+import com.troqueo.ads.domain.ad.Vehicle;
+import com.troqueo.ads.domain.ad.VehicleDeal;
+import com.troqueo.ads.domain.ad.VehicleDocument;
 import com.troqueo.ads.domain.user.User;
 import org.bson.types.ObjectId;
-import org.springframework.data.annotation.Id;
-import org.springframework.data.mongodb.core.mapping.Document;
-import org.springframework.data.mongodb.core.mapping.Field;
 
-import java.io.Serializable;
 import java.time.Instant;
 import java.util.List;
+import java.util.Objects;
 
-@Document(collection = "ads")
-public class Ad implements Serializable {
+public class AdDTO {
 
-    private static final long serialVersionUID = 1L;
-
-    @Id
     private ObjectId _id;
 
-    @Field("veiculo")
     private Vehicle veiculo;
 
-    @Field("imagens")
     private List<String> imagens;
 
-    @Field("createdAt")
     private Instant createdAt;
 
-    @Field("updatedAt")
     private Instant updatedAt;
 
-    @Field("documentacao")
     private VehicleDocument documentacao;
 
-    @Field("negociacao")
     private VehicleDeal negociacao;
 
-    @Field("usuario")
     private ObjectId usuario;
 
     private User user;
+
+    public AdDTO() {
+        // Empty constructor needed for Jackson.
+    }
+
+    public AdDTO(Ad ad) {
+        this._id = new ObjectId(ad.get_id());
+        this.veiculo = ad.getVeiculo();
+        this.imagens = ad.getImagens();
+        this.createdAt = ad.getCreatedAt();
+        this.updatedAt = ad.getUpdatedAt();
+        this.documentacao = ad.getDocumentacao();
+        this.negociacao = ad.getNegociacao();
+        this.usuario = new ObjectId(ad.getUsuario());
+        this.user = ad.getUser();
+    }
+
+    @Override
+    public String toString() {
+        return "AdDTO{" +
+            "_id=" + _id +
+            ", veiculo=" + veiculo +
+            ", imagens=" + imagens +
+            ", createdAt=" + createdAt +
+            ", updatedAt=" + updatedAt +
+            ", documentacao=" + documentacao +
+            ", negociacao=" + negociacao +
+            ", usuario=" + usuario +
+            ", user=" + user +
+            '}';
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        AdDTO adDTO = (AdDTO) o;
+        return Objects.equals(_id, adDTO._id);
+    }
+
+    @Override
+    public int hashCode() {
+
+        return Objects.hash(_id);
+    }
 
     public String get_id() {
         if (_id != null) return _id.toHexString();
@@ -98,9 +133,12 @@ public class Ad implements Serializable {
         this.negociacao = negociacao;
     }
 
-    public String getUsuario() {
-        if (usuario != null) return usuario.toHexString();
-        return null;
+    public ObjectId getUsuario() {
+        return usuario;
+    }
+
+    public void setUsuario(ObjectId usuario) {
+        this.usuario = usuario;
     }
 
     public User getUser() {
@@ -110,9 +148,4 @@ public class Ad implements Serializable {
     public void setUser(User user) {
         this.user = user;
     }
-
-    public void setUsuario(ObjectId usuario) {
-        this.usuario = usuario;
-    }
-
 }

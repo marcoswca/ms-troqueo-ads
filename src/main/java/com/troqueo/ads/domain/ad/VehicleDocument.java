@@ -13,7 +13,8 @@ public class VehicleDocument {
     public boolean ipvaPago;
     public boolean revisoesNaConcessionaria;
 
-    public VehicleDocument(){}
+    public VehicleDocument() {
+    }
 
     public VehicleDocument(boolean veiculoAdaptado, boolean veiculoDeColecionador, String placaDoVeiculo, boolean unicoDono, boolean garantiaDeFabrica, boolean veiculoFinanciado, boolean ipvaPago, boolean revisoesNaConcessionaria) {
         this.veiculoAdaptado = veiculoAdaptado;

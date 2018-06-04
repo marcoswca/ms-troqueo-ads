@@ -6,8 +6,8 @@ public class Phone {
 
     public Phone(String numero, boolean whatsApp) {
         this.numero = numero;
-        if(!whatsApp)
-            this.whatsApp=false;
+        if (!whatsApp)
+            this.whatsApp = false;
         else
             this.whatsApp = whatsApp;
     }

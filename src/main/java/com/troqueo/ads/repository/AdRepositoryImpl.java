@@ -3,17 +3,14 @@ package com.troqueo.ads.repository;
 import com.troqueo.ads.domain.ad.Ad;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.aggregation.*;
-import org.springframework.data.mongodb.core.query.*;
+import org.springframework.data.mongodb.core.query.Criteria;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
 import static org.springframework.data.mongodb.core.aggregation.Aggregation.match;
-import static org.springframework.data.mongodb.core.aggregation.Aggregation.newAggregation;
 import static org.springframework.data.mongodb.core.aggregation.Aggregation.project;
-import static org.springframework.data.mongodb.core.aggregation.Aggregation.lookup;
-import static org.springframework.data.mongodb.core.aggregation.Aggregation.unwind;
 
 public class AdRepositoryImpl implements AdRepositoryCustom {
 
@@ -26,12 +23,12 @@ public class AdRepositoryImpl implements AdRepositoryCustom {
     @Override
     public List<Ad> aggregate(Map<String, String> queryParams) {
         List<AggregationOperation> aggregationOperations = new ArrayList<AggregationOperation>();
-        if(queryParams.containsKey("maiorPreco")) {
+        if (queryParams.containsKey("maiorPreco")) {
             MatchOperation maxPriceOperation = getMaxPriceOperation(Float.parseFloat(queryParams.get("maiorPreco")));
             aggregationOperations.add(maxPriceOperation);
         }
 
-        if(queryParams.containsKey("menorPreco")){
+        if (queryParams.containsKey("menorPreco")) {
             MatchOperation minPriceOperation = getMinPriceOperation(Float.parseFloat(queryParams.get("menorPreco")));
             aggregationOperations.add(minPriceOperation);
         }

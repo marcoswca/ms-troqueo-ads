@@ -75,7 +75,7 @@ public final class SecurityUtils {
             .orElse(false);
     }
 
-    public static Object getTokenId(){
+    public static Object getTokenId() {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         return auth.getPrincipal();
     }
